@@ -1,0 +1,72 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
+
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Complete Payment</h2>
+            <p class="text-gray-500 text-sm mt-1">Scan QR code to pay via UPI</p>
+        </div>
+
+        <!-- Amount Breakdown -->
+        <div class="bg-gray-50 rounded-xl p-4 mb-6 space-y-2">
+            <div class="flex justify-between text-sm text-gray-600">
+                <span>Cart Total (USD)</span>
+                <span class="font-medium">${{ total_usd }}</span>
+            </div>
+            <div class="flex justify-between text-sm text-gray-600">
+                <span>Exchange Rate</span>
+                <span class="font-medium">₹{{ rate|floatformat:2 }} / $1</span>
+            </div>
+            <div class="flex justify-between text-sm text-gray-600">
+                <span>Amount (INR)</span>
+                <span class="font-medium">₹{{ total_inr }}</span>
+            </div>
+            <div class="flex justify-between text-sm text-gray-600">
+                <span>GST ({{ gst_rate }}%)</span>
+                <span class="font-medium">₹{{ gst }}</span>
+            </div>
+            <div class="border-t pt-2 flex justify-between text-base font-bold text-gray-800">
+                <span>Total Bill</span>
+                <span class="text-gray-900 font-bold">₹{{ final_bill }}</span>
+            </div>
+        </div>
+
+        <!-- QR Code -->
+        <div class="flex justify-center mb-4">
+            <div class="p-3 border-2 border-gray-200 rounded-xl inline-block">
+                <img src="{% static 'payment/' %}{{ qr_filename }}" alt="UPI QR Code" width="200" height="200"
+                    class="rounded-lg" />
+            </div>
+        </div>
+
+        <!-- UPI ID — masked for security -->
+        <div class="text-center mb-6">
+            <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">UPI ID</p>
+            <p class="text-sm font-semibold text-gray-700 bg-gray-100 inline-block px-4 py-2 rounded-lg">
+                {{ upi_masked }}
+            </p>
+        </div>
+
+        <!-- UPI Apps -->
+        <div class="flex justify-center gap-4 items-center flex-wrap">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/120px-Google_Pay_Logo.svg.png"
+                alt="GPay" height="20" style="height:32px;width:auto;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/120px-Paytm_Logo_%28standalone%29.svg.png"
+                alt="Paytm" height="20" style="height:32px;width:auto;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/120px-UPI-Logo-vector.svg.png"
+                alt="UPI" height="20" style="height:32px;width:auto;">
+        </div>
+
+        <!-- Back button -->
+        <a href="{% url 'cart' %}"
+            class="block text-center w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition">
+            ← Back to Cart
+        </a>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="flex bg-neutral-800 py-4 px-8 justify-between items-center">
+    <div>
+        <a class="text-white font-semibold" href="#">Qart</a>
+    </div>
+    <div class="flex gap-8 items-center">
+        <ul class="flex gap-4">
+            <li class="text-white"><a href="{% url 'home' %}">Home</a></li>
+            <li class="text-white"><a href="{% url 'cart' %}">Cart</a></li>
+
+            {% if user.is_authenticated %}
+                <li class="text-white"><a href="{% url 'profile' %}">Profile</a></li>
+                <li class="text-white">
+                    <form method="post" action="{% url 'logout' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:underline">Logout</button>
+                    </form>
+                </li>
+            {% else %}
+                <li class="text-white"><a href="{% url 'register' %}">Register</a></li>
+                <li class="text-white"><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+{% block content %}
+{% endblock %}

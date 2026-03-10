@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Jost:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="bg-gray-50" style="font-family:'Jost',sans-serif;">
+
+    <nav class="bg-neutral-900 sticky top-0 z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="{% url 'home' %}" class="text-white font-bold text-xl tracking-widest uppercase"
+                style="font-family:'Cormorant Garamond',serif;">Qart</a>
+            <ul class="flex items-center gap-8">
+                <li><a href="{% url 'home' %}"
+                        class="text-gray-400 hover:text-white text-xs font-medium tracking-widest uppercase transition">Home</a>
+                </li>
+                <li><a href="{% url 'cart' %}"
+                        class="text-gray-400 hover:text-white text-xs font-medium tracking-widest uppercase transition">Cart</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'profile' %}"
+                        class="text-gray-400 hover:text-white text-xs font-medium tracking-widest uppercase transition">Profile</a>
+                </li>
+                <li>
+                    <form method="post" action="{% url 'logout' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit"
+                            class="text-gray-400 hover:text-white text-xs font-medium tracking-widest uppercase transition cursor-pointer bg-transparent border-none"
+                            style="font-family:'Jost',sans-serif;">Logout</button>
+                    </form>
+                </li>
+                {% else %}
+                <li><a href="{% url 'register' %}"
+                        class="text-gray-400 hover:text-white text-xs font-medium tracking-widest uppercase transition">Register</a>
+                </li>
+                <li><a href="{% url 'login' %}"
+                        class="px-4 py-2 bg-white text-neutral-900 text-xs font-semibold tracking-widest uppercase hover:bg-gray-200 transition">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- FOOTER -->
+    <footer class="bg-neutral-900 mt-16 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+
+                <!-- Brand -->
+                <div>
+                    <h3 class="text-white font-bold text-xl tracking-widest uppercase mb-4"
+                        style="font-family:'Cormorant Garamond',serif;">QART</h3>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">
+                        Curated products from top brands. Fast checkout, secure payment.
+                    </p>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="text-gray-300 text-xs font-semibold tracking-widest uppercase mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'home' %}"
+                                class="text-gray-500 hover:text-white text-sm font-light transition">Home</a></li>
+                        <li><a href="{% url 'cart' %}"
+                                class="text-gray-500 hover:text-white text-sm font-light transition">Cart</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'profile' %}"
+                                class="text-gray-500 hover:text-white text-sm font-light transition">Profile</a></li>
+                        {% else %}
+                        <li><a href="{% url 'login' %}"
+                                class="text-gray-500 hover:text-white text-sm font-light transition">Login</a></li>
+                        <li><a href="{% url 'register' %}"
+                                class="text-gray-500 hover:text-white text-sm font-light transition">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <!-- Payment -->
+                <div>
+                    <h4 class="text-gray-300 text-xs font-semibold tracking-widest uppercase mb-4">We Accept</h4>
+                    <div class="flex gap-2 flex-wrap">
+                        <span class="px-3 py-1 border border-white/10 text-gray-400 text-xs rounded">GPay</span>
+                        <span class="px-3 py-1 border border-white/10 text-gray-400 text-xs rounded">PhonePe</span>
+                        <span class="px-3 py-1 border border-white/10 text-gray-400 text-xs rounded">Paytm</span>
+                        <span class="px-3 py-1 border border-white/10 text-gray-400 text-xs rounded">BHIM</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-6 text-center">
+                <p class="text-gray-600 text-xs tracking-wide">© 2025 QART. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

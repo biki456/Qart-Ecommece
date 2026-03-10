@@ -1,0 +1,67 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+
+<div class="my-8 flex justify-center">
+  <h2 class="font-extrabold text-4xl underline text-gray-900">
+    {% if query %}
+      Search results for "{{ query }}"
+    {% else %}
+      Featured Products
+    {% endif %}
+  </h2>
+</div>
+
+<!-- Search Form -->
+<div class="flex justify-center mb-8">
+  <form method="get" action="{% url 'search' %}" class="w-full max-w-md flex">
+    <input
+      type="text"
+      name="q"
+      value="{{ query }}"
+      placeholder="Search products..."
+      class="w-full px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-gray-900"
+    />
+    <button
+      type="submit"
+      class="px-6 py-2 bg-gray-900 text-white rounded-r-md hover:bg-black transition duration-200"
+    >
+      Search
+    </button>
+  </form>
+</div>
+
+<div class="mx-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+  {% if product_data %}
+    {% for product in product_data %}
+    <div
+      class="flex flex-col rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out transform hover:-translate-y-1 bg-white">
+      <div class="flex items-center justify-center h-48 p-6">
+        <img src="{{ product.thumbnail }}" alt="{{ product.title }}" class="max-h-40 object-contain" loading="lazy" />
+      </div>
+      <div class="px-6 pb-6 flex flex-col flex-grow">
+        <h3 class="text-lg font-semibold text-gray-900 truncate" title="{{ product.title }}">{{ product.title }}</h3>
+        {% if product.brand %}
+        <p class="text-sm text-gray-500 mt-1">{{ product.brand }}</p>
+        {% endif %}
+        <p class="text-green-600 font-bold text-xl mt-3">${{ product.price }}</p>
+        {% if product.description %}
+        <p class="text-gray-600 text-sm mt-2 line-clamp-3">{{ product.description }}</p>
+        {% endif %}
+        <div class="mt-auto pt-4">
+          <form method="post" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+            <button
+              class="w-full px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-black focus:ring-4 focus:ring-gray-700 transition duration-200">
+              Add to Cart
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-center text-gray-600 col-span-full">No products found.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

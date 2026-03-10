@@ -1,0 +1,87 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+  <h2 class="text-3xl font-bold mb-6 text-gray-800">Your Shopping Cart</h2>
+
+  {% if items %}
+  <div class="overflow-x-auto bg-white shadow rounded-lg">
+    <table class="w-full table-auto border-collapse">
+      <thead class="bg-gray-100">
+        <tr class="text-left text-sm font-semibold text-gray-600 uppercase">
+          <th class="px-6 py-4">Product</th>
+          <th class="px-6 py-4">Brand</th>
+          <th class="px-6 py-4">Price</th>
+          <th class="px-6 py-4">Quantity</th>
+          <th class="px-6 py-4">Total</th>
+          <th class="px-6 py-4">Action</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
+        {% for item in items %}
+        <tr>
+          <td class="px-6 py-4 flex items-center space-x-4">
+            {% if item.product.thumbnail %}
+              <img src="{{ item.product.thumbnail }}" alt="{{ item.product.title }}" class="w-16 h-16 object-cover rounded">
+            {% endif %}
+            <div>
+              <div class="font-medium">{{ item.product.title }}</div>
+              <p class="text-gray-500 text-xs">{{ item.product.description|truncatechars:50 }}</p>
+            </div>
+          </td>
+          <td class="px-6 py-4">{{ item.product.brand }}</td>
+          <td class="px-6 py-4">${{ item.product.price }}</td>
+          <td class="px-6 py-4">{{ item.quantity }}</td>
+          <td class="px-6 py-4 font-semibold">${{ item.total_price }}</td>
+          <td class="px-6 py-4 space-y-2">
+            <!-- Remove one quantity -->
+            <form method="post" action="{% url 'remove_from_cart' item.product.id %}">
+              {% csrf_token %}
+              <button type="submit"
+                class="text-yellow-600 hover:text-yellow-800 transition duration-150 ease-in-out text-sm font-medium">
+                Remove 1
+              </button>
+            </form>
+
+            <!-- Delete entire item -->
+            <form method="post" action="{% url 'delete_cart_item' item.product.id %}">
+              {% csrf_token %}
+              <button type="submit"
+                class="text-red-600 hover:text-red-800 transition duration-150 ease-in-out text-sm font-medium">
+                Delete All
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-6 flex justify-between items-center">
+    <div>
+      <a href="{% url 'home' %}"
+         class="inline-block px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition">
+        ← Continue Shopping
+      </a>
+    </div>
+    <div class="text-right">
+      <p class="text-lg font-semibold text-gray-800">Total: ${{ total }}</p>
+      <a href="{% url 'pay'%}"
+        class="mt-2 px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+        Proceed to Checkout
+      </a>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="bg-white p-6 rounded-lg shadow text-center">
+    <p class="text-gray-600 text-lg">Your cart is empty.</p>
+    <a href="{% url 'home' %}"
+       class="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+      Start Shopping
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
